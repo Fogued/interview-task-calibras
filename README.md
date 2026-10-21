@@ -9,6 +9,10 @@ Find every component in a hand-drawn circuit diagram and say what it is (Digitiz
 
 A short report with the reasoning behind each choice is in [`Report.md`](Report.md).
 
+Both notebooks are public on Kaggle with all outputs, so every reported number can be checked without retraining:
+   - Task 1: [circuit-component-detector](https://www.kaggle.com/code/diegofogued/circuit-component-detector)
+   - Bonus: [value-reading](https://www.kaggle.com/code/diegofogued/value-reading)
+
 ## Repository contents
 
 ```
@@ -18,7 +22,7 @@ task1_detection/
 task2_value_reading/
 ├── value-reading.ipynb             # text detection, reading, matching (with outputs)
 └── results/                        # values_summary.json, text detector log and args, figures
-REPORT.pdf                          # short report (1-2 pages)
+Report.md                          # short report (1-2 pages)
 LLM_USAGE.md                        # prompts and responses of the LLM used during the task
 ```
 
