@@ -1,6 +1,4 @@
-# Handwritten Circuit Diagram Recognition — Report
-
-Oct 21, 2026 ·
+# Report
 
 ## Goal and dataset
 
