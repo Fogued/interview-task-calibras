@@ -45,7 +45,7 @@ task1_detection/
     └── figures/                     # curves, confusion matrices, sample predictions
 ```
 
-**Trained weights** (`best.pt`) and the full output zip are attached to the [Release](../../releases).
+**Trained weights and all run outputs** are in `submission_outputs.zip` in the [Release](../../releases) (weights at `yolo11m_1024/weights/best.pt`).
 
 ## How to reproduce
 
