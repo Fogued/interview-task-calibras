@@ -100,13 +100,6 @@ Per-class metrics: [`task1_detection/results/test_per_class_metrics.csv`](task1_
 
 ![Example: components in green, values in red with a line to the component they were attached to](task2_value_reading/results/figures/example_values.png)
 
-## Limitations
-
-- **Scans, not photos.** All data are clean scans. On a drawing outside the dataset, the 0.78 threshold was too strict and some components were only found at 0.25.
-- **Split by image, not by writer.** The dataset has no writer id, so the same handwriting may appear in train and test.
-- **One configuration.** One model per stage and one seed; no comparison with other architectures or sizes.
-- **Labelling style.** The reader only knows the dataset's style: values without designators, so a label like `R1 4.7kΩ` is misread.
-
 ## Licences
 
 - Dataset: CC BY 4.0 (Digitize-HCD).
