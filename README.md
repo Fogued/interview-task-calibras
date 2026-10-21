@@ -7,7 +7,7 @@ Find every component in a hand-drawn circuit diagram and say what it is (Digitiz
 | **Task 1: component detection** | YOLO11m fine-tuned at 1024 px | **mAP50 0.989, mAP50-95 0.810**; 98.6 % of components found with the correct class |
 | **Bonus: value reading** | Text detector (YOLO11s) + fine-tuned TrOCR + unit-aware matching | **90.0 %** of values found, read exactly and attached to a component of a compatible class |
 
-A short report with the reasoning behind each choice is in [`REPORT.pdf`](REPORT.pdf).
+A short report with the reasoning behind each choice is in [`Report.md`](Report.md).
 
 ## Repository contents
 
