@@ -36,7 +36,7 @@ The fine-tuned TrOCR reader (~1.3 GB) is not distributed; the bonus notebook ret
 
 The dataset is not included in this repository. Download it from Mendeley, or attach it in Kaggle as a dataset.
 
-## How to run (Kaggle, GPU T4, Internet On)
+## How to run
 
 1. **Task 1:** import `task1_detection/circuit-detector.ipynb`, attach the Digitize-HCD dataset and run all cells.
    - Keep `RUN_TEST = False` while developing; set it to `True` for the final run. The test set is evaluated once, recorded in `TEST_DONE.txt`.
@@ -106,7 +106,6 @@ Per-class metrics: [`task1_detection/results/test_per_class_metrics.csv`](task1_
 - **Split by image, not by writer.** The dataset has no writer id, so the same handwriting may appear in train and test.
 - **One configuration.** One model per stage and one seed; no comparison with other architectures or sizes.
 - **Labelling style.** The reader only knows the dataset's style: values without designators, so a label like `R1 4.7kΩ` is misread.
-- **Matching correctness is not measured per instance** (no ground-truth links).
 
 ## Licences
 
