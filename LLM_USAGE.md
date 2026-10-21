@@ -7,17 +7,16 @@ I used Claude Opus 5.5 throughout the task, not only to write code: to research 
 **1. Research: choosing the approach**
 
 - Comparing detector families for this problem (one-stage YOLO vs. two-stage Faster R-CNN) and model sizes (YOLO11s / m / l) for a ~1k-image dataset on a free T4.
-- Checking whether the reference thesis (YOLOv8 in MMDetection, 640 px) was valid evidence for YOLO11m. Conclusion: it is not direct evidence, so the report states that no own benchmark was run.
 - For the bonus: options for reading handwritten values (off-the-shelf OCR vs. fine-tuned TrOCR) and for linking each text to a component.
 - Listing the alternatives I did not run, and why (the "Alternatives considered" section of the report).
 
-**2. Exploration: understanding the data**
+**2. Exploration: understanding the data and things to have in consideration**
 
 - What to check before training: image formats, COCO box format `[x, y, w, h]`, boxes outside the image or degenerate, class imbalance.
 - How large the symbols become after resizing. This box-size check is what justifies `imgsz=1024` instead of 640.
 - How to split without leakage (by image, stratified on each image's rarest class) and how to confirm that every class appears in every split.
 
-**3. Understanding: concepts I needed to defend the work**
+**3. Understanding concepts**
 
 - Evaluation: IoU, mAP50 vs. mAP50-95, why mAP is computed at `conf=0.001`, precision/recall at the best-F1 point, and how to choose an operating threshold on validation.
 - Reading the Ultralytics confusion matrix (`matrix[predicted, true]`, background row and column).
@@ -39,11 +38,7 @@ I used Claude Opus 5.5 throughout the task, not only to write code: to research 
   - the error-analysis cells and the overlay of predictions on the ground truth.
 - For the bonus: the TrOCR fine-tuning loop with an explicit loss, the unit-aware matching, the end-to-end evaluation and the example figure.
 - Small utilities and fixes:
-  - finding the dataset and weights automatically;
-  - a helper that requires exactly one matching file;
-  - the guard that runs the test set only once;
   - saving and zipping the outputs;
-  - the own-image test cell.
 - Debugging errors and version issues, for example pinning `transformers` 4.57.6 because version 5 could not load the TrOCR tokenizer.
 
 **6. Review: finding my own mistakes**
@@ -76,14 +71,14 @@ I used Claude Opus 5.5 throughout the task, not only to write code: to research 
 > - Task: detect and classify every component of a hand-drawn circuit diagram (17 classes, box + label).
 > - Dataset: Digitize-HCD, 1,277 images scanned at 600 dpi, COCO annotations in `component_annotations.json`.
 > - Environment: Kaggle, GPU T4, 12 h per session, Internet on. No paid solutions.
-> - Current notebook: YOLO11m pretrained on COCO, `imgsz=1024`, 100 epochs, `patience=20`, `batch=8`, 80/10/10 split by image, seed 42.
+> - Current notebook: YOLO11m pretrained on COCO, `imgsz=1024`, 100 epochs, `patience=20`, `batch=4`, 80/10/10 split by image, seed 42.
 > - The test set must be used once, after all decisions are fixed.
 >
 > **Technical checklist (summary).**
 >
 > - *Data and paths:* image extension (`glob("*.jpg")` on PNG is a bug), dataset integrity, COCO `[x, y, w, h]` boxes, out-of-bounds and degenerate boxes, COCO→YOLO conversion (class offset, normalisation, clipping, `data.yaml`).
 > - *Split:* by image, never by box; is "rarest class per image" stratification correct; save the exact split; stale files in the output folder could cause silent leakage on re-runs.
-> - *Training:* `batch=8` at 1024 px on a 16 GB T4 (out-of-memory risk); time per epoch; reproducibility (seed, pinned Ultralytics version, `requirements.txt`); augmentation (`fliplr=0`, `degrees`, mosaic); `exist_ok=True` could reuse an old `best.pt`; justify `imgsz=1024` with box-size percentiles.
+> - *Training:* `batch=4` at 1024 px on a 16 GB T4 (out-of-memory risk); time per epoch; reproducibility (seed, pinned Ultralytics version, `requirements.txt`); augmentation (`fliplr=0`, `degrees`, mosaic); `exist_ok=True` could reuse an old `best.pt`; justify `imgsz=1024` with box-size percentiles.
 > - *Evaluation:* `conf=0.001` is right for AP, but the confusion matrix needs a real threshold; `iou=0.6` in `model.val` is an NMS setting, not the mAP threshold; `m.box.mp/mr` are at the best-F1 point; add `n_gt` per class; check the confusion-matrix orientation; guard so the test set runs once; save metrics and predictions.
 > - *Error analysis:* overlay ground truth and predictions; analyse small components, rare classes and look-alike pairs (BJT NPN/PNP, Diode/Zener, MOSFET N/P).
 > - *Model justification:* the reference thesis used YOLOv8, which is not direct evidence for YOLO11m; either compare on validation or state that there is no own benchmark.
@@ -158,5 +153,4 @@ Short questions I asked while finishing the task, with the gist of each answer:
 | Is there over-engineering in the bonus task? Could it be done more simply? | No: each part is backed by a number (text detector mAP50 0.995; fine-tuning takes the reader from 10.9 % to ~91 % exact match; the unit rule changes 5.1 % of the choices). Simpler options exist (text as an 18th YOLO class, distance-only matching, off-the-shelf OCR), each with a cost. |
 | Why are we using the other model too? To identify the components again?    | Yes. The Task 1 detector finds the components, the text detector finds where the text is and TrOCR reads it. The matching joins the two outputs.                                                                                                                                             |
 | Where in the notebook is the 10 % that shows we need to fine-tune?         | Section 4 prints the zero-shot score on validation (exact match 0.109); section 5 prints the fine-tuned score (0.916).                                                                                                                                                                       |
-| Would it be better to have just one notebook?                              | No: the bonus is optional, so it can be judged separately, and a combined notebook would take ~3 h and fail as a whole.                                                                                                                                                                      |
-| Question                                                                   | Answer (summary)                                                                                                                                                                                                                                                                             |
+| Would it be better to have just one notebook?                              | No: the bonus is optional, so it can be judged separately, and a combined notebook would take ~3 h and fail as a whole.                                                                                                                                                                      |                                                                                                                                                                                                                                                                          |
